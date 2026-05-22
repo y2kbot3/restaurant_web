@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANJI — Korean American Kitchen & Bar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --beige:      #f5ede0;
+            --cream:      #faf7f2;
+            --charcoal:   #1c1814;
+            --warm-dark:  #231d16;
+            --gold:       #c8a96e;
+            --gold-light: #dfc28f;
+            --brown:      #8b6b3d;
+            --border:     #e2d5c3;
+            --text:       #2a1f14;
+            --text-light: #7a6652;
+            --white:      #ffffff;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--beige);
+            overflow-x: hidden;
+        }
+
+        /* ── SCROLL PROGRESS BAR ── */
+        #progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 2px;
+            width: 0%;
+            background: linear-gradient(to right, var(--gold), var(--gold-light));
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* ── NAVIGATION ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1.6rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: padding 0.5s cubic-bezier(0.4,0,0.2,1),
+                        background 0.5s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.5s cubic-bezier(0.4,0,0.2,1);
+            border-bottom: 1px solid transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(250,247,242,0.96);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 4rem;
+            border-bottom-color: var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.5s ease;
+        }
+        nav.scrolled .nav-logo { color: var(--charcoal); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+
+        /* Animated underline on nav links */
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        .nav-links li a:hover::after { width: 100%; }
+        nav.scrolled .nav-links li a::after { background: var(--brown); }
+
+        nav.scrolled .nav-links li a { color: var(--text-light); }
+        .nav-links li a:hover,
+        nav.scrolled .nav-links li a:hover { color: var(--charcoal); }
+
+        .nav-cta {
+            font-size: 0.75rem !important;
+            font-weight: 400 !important;
+            letter-spacing: 0.12em !important;
+            text-transform: uppercase !important;
+            padding: 0.65rem 1.4rem !important;
+            border: 1px solid rgba(255,255,255,0.5) !important;
+            color: var(--white) !important;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.25s ease !important;
+        }
+        .nav-cta::after { display: none !important; }
+        .nav-cta:hover {
+            background: var(--white) !important;
+            color: var(--charcoal) !important;
+            transform: translateY(-1px) !important;
+        }
+        nav.scrolled .nav-cta {
+            border-color: var(--charcoal) !important;
+            color: var(--charcoal) !important;
+        }
+        nav.scrolled .nav-cta:hover {
+            background: var(--charcoal) !important;
+            color: var(--white) !important;
+        }
+
+        /* ── HERO ── */
+        #home {
+            height: 100vh;
+            min-height: 700px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Separate div for parallax-able background */
+        .hero-bg {
+            position: absolute;
+            inset: -25% 0 -25%;
+            /* Replace with: background: url('hero.jpg') center/cover no-repeat; */
+            background: linear-gradient(160deg, #1e1208 0%, #2c1e10 28%, #1c1610 58%, #0f0d0b 100%);
+            will-change: transform;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 25% 55%, rgba(200,169,110,0.09) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 25%, rgba(139,107,61,0.07)   0%, transparent 50%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            padding: 0 2rem;
+            will-change: transform, opacity;
+        }
+
+        /* Staggered entrance animations */
+        @keyframes heroFadeUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-eyebrow  { animation: heroFadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+        .hero-title    { animation: heroFadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+        .hero-subtitle { animation: heroFadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
+        .hero-actions  { animation: heroFadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
+        .hero-scroll   { animation: heroFadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 1.1s  both; }
+
+        .hero-eyebrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.6rem;
+        }
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: '';
+            width: 36px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.55;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 7.5vw, 5.8rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.1;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.98rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            color: rgba(255,255,255,0.48);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            padding: 1rem 2.6rem;
+            background: var(--gold);
+            color: var(--charcoal);
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(200,169,110,0.35);
+        }
+        .btn-primary:active { transform: translateY(-1px); }
+
+        .btn-ghost {
+            font-size: 0.78rem;
+            font-weight: 400;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            padding: 1rem 2.6rem;
+            border: 1px solid rgba(255,255,255,0.28);
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            display: inline-block;
+            transition: border-color 0.3s ease, color 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .btn-ghost:hover {
+            border-color: rgba(255,255,255,0.7);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        .hero-scroll:hover { opacity: 0.7; }
+
+        .scroll-line {
+            width: 1px;
+            height: 52px;
+            background: linear-gradient(to bottom, rgba(200,169,110,0.8), transparent);
+            animation: scrollPulse 2.2s ease-in-out infinite;
+        }
+        .hero-scroll span {
+            font-size: 0.62rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.25; transform: scaleY(1); }
+            50%       { opacity: 1;    transform: scaleY(1.06); }
+        }
+
+        /* ── SHARED SECTION ── */
+        section { padding: 8rem 4rem; }
+
+        .section-label {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--charcoal);
+        }
+
+        .section-divider {
+            width: 44px;
+            height: 1px;
+            background: var(--gold);
+            margin: 1.6rem auto;
+            transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        .section-divider.visible { width: 80px; }
+        .section-divider.left { margin: 1.6rem 0; }
+
+        /* ── MENU ── */
+        #menu { background: var(--cream); }
+        .menu-header { text-align: center; margin-bottom: 4rem; }
+
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        /* Animated sliding indicator */
+        .tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            height: 2px;
+            background: var(--gold);
+            transition: left 0.42s cubic-bezier(0.4,0,0.2,1), width 0.42s cubic-bezier(0.4,0,0.2,1);
+            pointer-events: none;
+        }
+
+        .menu-tab {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 400;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            padding: 0.9rem 2rem;
+            cursor: pointer;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        .menu-tab.active { color: var(--charcoal); }
+        .menu-tab:hover:not(.active) { color: var(--text); }
+
+        .menu-panel { display: none; max-width: 920px; margin: 0 auto; }
+
+        @keyframes panelReveal {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .menu-panel.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            animation: panelReveal 0.55s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .menu-item {
+            padding: 1.8rem 1.4rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.25s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1);
+            cursor: default;
+        }
+        .menu-item:hover {
+            background: rgba(200,169,110,0.06);
+            transform: translateX(6px);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 0.8rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .menu-item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--charcoal);
+            transition: color 0.25s ease;
+        }
+        .menu-item:hover .menu-item-name { color: var(--brown); }
+
+        .menu-item-price {
+            font-size: 0.84rem;
+            font-weight: 400;
+            color: var(--gold);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .menu-item-desc {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--text-light);
+            line-height: 1.65;
+        }
+
+        /* ── ABOUT ── */
+        #about {
+            background: var(--charcoal);
+            display: flex;
+            align-items: stretch;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .about-image {
+            flex: 1;
+            min-height: 620px;
+            /* Replace with: background: url('about.jpg') center/cover; */
+            background: linear-gradient(145deg, #2c1e0d 0%, #1e170f 40%, #0f0d0b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 45% 50%, rgba(200,169,110,0.1) 0%, transparent 65%);
+            transition: opacity 0.6s ease;
+        }
+        #about:hover .about-image::before { opacity: 1.4; }
+
+        .about-image-watermark {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 9rem;
+            font-weight: 600;
+            color: rgba(200,169,110,0.07);
+            letter-spacing: 0.08em;
+            user-select: none;
+            transition: color 0.8s ease, letter-spacing 0.8s ease;
+        }
+        #about:hover .about-image-watermark {
+            color: rgba(200,169,110,0.11);
+            letter-spacing: 0.14em;
+        }
+
+        .about-content {
+            flex: 1;
+            padding: 7rem 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .about-content .section-label { color: var(--gold); }
+        .about-content .section-title { color: var(--white); }
+
+        .about-text {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.55);
+            line-height: 1.9;
+            margin-top: 1.2rem;
+        }
+
+        .about-chefs {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .chef-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--white);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .chef-title {
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* ── RESERVATIONS ── */
+        #reservations { background: var(--beige); }
+
+        .reservations-inner {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .reservations-desc {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-light);
+            line-height: 1.75;
+            margin-top: 0.8rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .reservation-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            text-align: left;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+        .form-group:focus-within > label { color: var(--gold); }
+
+        input, select, textarea {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 0.9rem 1rem;
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--text);
+            outline: none;
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(200,169,110,0.14);
+        }
+        input:hover:not(:focus), select:hover:not(:focus) {
+            border-color: #cdbdab;
+        }
+        textarea { resize: vertical; min-height: 100px; }
+
+        .form-submit { grid-column: 1 / -1; text-align: center; margin-top: 0.8rem; }
+
+        .btn-submit {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 1.1rem 3.5rem;
+            background: var(--charcoal);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease;
+        }
+        .btn-submit:hover {
+            background: var(--brown);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(42,31,20,0.28);
+        }
+        .btn-submit:active  { transform: translateY(-1px); }
+        .btn-submit:disabled { cursor: default; transform: none; box-shadow: none; }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--warm-dark);
+            padding: 5.5rem 4rem 2.5rem;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            padding-bottom: 3.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            color: var(--white);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.82rem;
+            font-weight: 300;
+            line-height: 1.75;
+            color: rgba(255,255,255,0.35);
+        }
+
+        .footer-heading {
+            font-size: 0.66rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+        .footer-links a {
+            font-size: 0.84rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+
+        .footer-info p {
+            font-size: 0.84rem;
+            font-weight: 300;
+            line-height: 1.85;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copy {
+            font-size: 0.73rem;
+            color: rgba(255,255,255,0.2);
+        }
+
+        .footer-social { display: flex; gap: 1.6rem; }
+        .footer-social a {
+            font-size: 0.7rem;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.28);
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .footer-social a:hover {
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* ── SCROLL-REVEAL ── */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.85s cubic-bezier(0.16,1,0.3,1);
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            nav { padding: 1.2rem 2rem; }
+            nav.scrolled { padding: 0.9rem 2rem; }
+            .nav-links { display: none; }
+            section { padding: 6rem 2rem; }
+            .menu-panel.active { grid-template-columns: 1fr; }
+            #about { flex-direction: column; }
+            .about-image { min-height: 300px; }
+            .about-content { padding: 4rem 2.5rem; }
+            .about-chefs { flex-wrap: wrap; gap: 2rem; }
+            .reservation-form { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: 1; }
+            .footer-top { grid-template-columns: 1fr 1fr; }
+            .footer-bottom { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+
+        @media (max-width: 580px) {
+            .hero-actions { flex-direction: column; align-items: center; }
+            .footer-top { grid-template-columns: 1fr; }
+            .menu-tab { padding: 0.9rem 1.2rem; }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- ══════════ NAVIGATION ══════════ -->
+<nav id="navbar">
+    <a href="#home" class="nav-logo">HANJI</a>
+    <ul class="nav-links">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#reservations">Reservations</a></li>
+        <li><a href="#reservations" class="nav-cta">Reserve a Table</a></li>
+    </ul>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="home">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-content" id="hero-content">
+        <p class="hero-eyebrow">Washington, D.C. &nbsp;·&nbsp; Est. 2024</p>
+        <h1 class="hero-title">Where East<br>Meets West</h1>
+        <p class="hero-subtitle">
+            A refined union of Korean tradition and American spirit,<br>
+            crafted one plate — and one pour — at a time.
+        </p>
+        <div class="hero-actions">
+            <a href="#reservations" class="btn-primary">Reserve a Table</a>
+            <a href="#menu" class="btn-ghost">Explore the Menu</a>
+        </div>
+    </div>
+    <div class="hero-scroll" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+        <div class="scroll-line"></div>
+        <span>Scroll</span>
+    </div>
+</section>
+
+<!-- ══════════ MENU ══════════ -->
+<section id="menu">
+    <div class="menu-header">
+        <span class="section-label fade-up">Culinary Experience</span>
+        <h2 class="section-title fade-up">The Menu</h2>
+        <div class="section-divider fade-up"></div>
+    </div>
+
+    <div class="menu-tabs fade-up" id="menu-tabs">
+        <button class="menu-tab active" data-tab="small-plates">Small Plates</button>
+        <button class="menu-tab" data-tab="mains">Mains</button>
+        <button class="menu-tab" data-tab="bar">From the Bar</button>
+        <button class="menu-tab" data-tab="desserts">Desserts</button>
+        <span class="tab-indicator" id="tab-indicator"></span>
+    </div>
+
+    <!-- Small Plates -->
+    <div class="menu-panel active" id="small-plates">
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Korean Fried Chicken Bao</span><span class="menu-item-price">$18</span></div>
+            <p class="menu-item-desc">Gochujang glaze, kimchi slaw, sesame aioli, steamed bao bun</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Wagyu Beef Tartare</span><span class="menu-item-price">$24</span></div>
+            <p class="menu-item-desc">Korean pear, sesame oil, quail egg yolk, crispy rice crackers</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Scallion Pancake & Caviar</span><span class="menu-item-price">$28</span></div>
+            <p class="menu-item-desc">Pajeon, crème fraîche, Kaluga sturgeon caviar, chive oil</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">BBQ Pork Belly Sliders</span><span class="menu-item-price">$19</span></div>
+            <p class="menu-item-desc">Doenjang glaze, pickled daikon, brioche, house grain mustard</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Spicy Tuna Ssam</span><span class="menu-item-price">$22</span></div>
+            <p class="menu-item-desc">Yellowfin tuna, gochujang mayo, cucumber, butter lettuce</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Black Truffle Gyoza</span><span class="menu-item-price">$21</span></div>
+            <p class="menu-item-desc">Wagyu & black truffle filling, dashi ponzu, microgreens</p>
+        </div>
+    </div>
+
+    <!-- Mains -->
+    <div class="menu-panel" id="mains">
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Short Rib Galbi</span><span class="menu-item-price">$52</span></div>
+            <p class="menu-item-desc">48-hour braised, parsnip purée, charred scallion, rich jus</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Black Cod Doenjang</span><span class="menu-item-price">$48</span></div>
+            <p class="menu-item-desc">Miso-glazed, baby bok choy, dashi broth, crispy shallots</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">NY Strip Bulgogi</span><span class="menu-item-price">$68</span></div>
+            <p class="menu-item-desc">12oz grass-fed, kimchi compound butter, truffle jus, bone marrow</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Lobster Bibimbap</span><span class="menu-item-price">$58</span></div>
+            <p class="menu-item-desc">Maine lobster, dolsot rice, seasonal vegetables, gochujang, soft egg</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Duck Breast Ssambap</span><span class="menu-item-price">$46</span></div>
+            <p class="menu-item-desc">Honey-soy glaze, sweet potato purée, shiitake, crispy rice cake</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">King Salmon Miyeok</span><span class="menu-item-price">$44</span></div>
+            <p class="menu-item-desc">Pan-seared, seaweed brown butter, spring onion broth, forbidden rice</p>
+        </div>
+    </div>
+
+    <!-- Bar -->
+    <div class="menu-panel" id="bar">
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Seoul Mule</span><span class="menu-item-price">$18</span></div>
+            <p class="menu-item-desc">Premium soju, ginger beer, cucumber, fresh lime, mint</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Han River Negroni</span><span class="menu-item-price">$22</span></div>
+            <p class="menu-item-desc">Korean single malt whiskey, sweet vermouth, Campari, grapefruit</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Jeju Yuzu Sour</span><span class="menu-item-price">$20</span></div>
+            <p class="menu-item-desc">Yuzu gin, fresh lemon, egg white, wildflower honey, Angostura</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Makgeolli Spritz</span><span class="menu-item-price">$19</span></div>
+            <p class="menu-item-desc">Traditional rice wine, elderflower liqueur, prosecco, Asian pear</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Gangnam Old Fashioned</span><span class="menu-item-price">$24</span></div>
+            <p class="menu-item-desc">Doenjang-washed bourbon, ginseng bitters, smoked black cherry</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Jirisan Martini</span><span class="menu-item-price">$21</span></div>
+            <p class="menu-item-desc">Vodka, Dolin blanc, elderflower, yuzu, pickled ginger brine</p>
+        </div>
+    </div>
+
+    <!-- Desserts -->
+    <div class="menu-panel" id="desserts">
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Bingsu Brûlée</span><span class="menu-item-price">$16</span></div>
+            <p class="menu-item-desc">Shaved milk ice, caramelized crust, sweet red bean, fresh mango</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Hotteok Sundae</span><span class="menu-item-price">$14</span></div>
+            <p class="menu-item-desc">Brown sugar cinnamon pancake, vanilla bean ice cream, sesame brittle</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Matcha Basque Cheesecake</span><span class="menu-item-price">$15</span></div>
+            <p class="menu-item-desc">Ceremonial grade matcha, burnt top, seasonal berry coulis</p>
+        </div>
+        <div class="menu-item fade-up">
+            <div class="menu-item-header"><span class="menu-item-name">Misugaru Panna Cotta</span><span class="menu-item-price">$13</span></div>
+            <p class="menu-item-desc">Roasted multi-grain cream, black sesame tuile, honey jelly</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════ ABOUT ══════════ -->
+<section id="about">
+    <div class="about-image">
+        <div class="about-image-watermark">HANJI</div>
+    </div>
+    <div class="about-content">
+        <span class="section-label fade-up">Our Story</span>
+        <h2 class="section-title fade-up">Two Cultures,<br>One Table</h2>
+        <div class="section-divider left fade-up"></div>
+        <p class="about-text fade-up">
+            Born from the vision of two chefs who believe food is the most honest form of storytelling, HANJI found its home in the heart of Washington, D.C. — where the precision of Korean culinary tradition meets the bold confidence of American gastronomy.
+        </p>
+        <p class="about-text fade-up">
+            Every plate is a dialogue between two worlds: fermented and fresh, delicate and robust, ancient and modern. We source the finest regional ingredients and pair them with house-made Korean condiments, aged spirits from both hemispheres, and a commitment to craft that borders on obsession.
+        </p>
+        <div class="about-chefs fade-up">
+            <div>
+                <span class="chef-name">Ji-Yeon Park</span>
+                <span class="chef-title">Executive Chef & Co-Founder</span>
+            </div>
+            <div>
+                <span class="chef-name">James Morrison</span>
+                <span class="chef-title">Head Chef & Co-Founder</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════ RESERVATIONS ══════════ -->
+<section id="reservations">
+    <div class="reservations-inner">
+        <span class="section-label">Book a Table</span>
+        <h2 class="section-title fade-up">Reserve Your Table</h2>
+        <div class="section-divider fade-up"></div>
+        <p class="reservations-desc fade-up">
+            We recommend reservations for all party sizes. Walk-ins are always welcome at the bar — first come, first seated.
+        </p>
+        <form class="reservation-form fade-up" onsubmit="handleSubmit(event)" novalidate>
+            <div class="form-group">
+                <label for="res-date">Date</label>
+                <input type="date" id="res-date" required>
+            </div>
+            <div class="form-group">
+                <label for="res-time">Time</label>
+                <select id="res-time" required>
+                    <option value="" disabled selected>Select a time</option>
+                    <option>5:30 PM</option><option>6:00 PM</option><option>6:30 PM</option>
+                    <option>7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option>
+                    <option>8:30 PM</option><option>9:00 PM</option><option>9:30 PM</option>
+                    <option>10:00 PM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="res-party">Party Size</label>
+                <select id="res-party" required>
+                    <option value="" disabled selected>Number of guests</option>
+                    <option>1 Guest</option><option>2 Guests</option><option>3 Guests</option>
+                    <option>4 Guests</option><option>5 Guests</option><option>6 Guests</option>
+                    <option>7+ Guests</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="res-name">Full Name</label>
+                <input type="text" id="res-name" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+                <label for="res-email">Email Address</label>
+                <input type="email" id="res-email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="res-phone">Phone Number</label>
+                <input type="tel" id="res-phone" placeholder="+1 (202) 000-0000">
+            </div>
+            <div class="form-group full">
+                <label for="res-notes">Special Requests</label>
+                <textarea id="res-notes" placeholder="Dietary restrictions, special occasions, seating preferences..."></textarea>
+            </div>
+            <div class="form-submit">
+                <button type="submit" class="btn-submit" id="submit-btn">Confirm Reservation</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+    <div class="footer-top">
+        <div>
+            <span class="footer-logo">HANJI</span>
+            <p class="footer-tagline">
+                Korean American Kitchen & Bar<br>
+                A fusion of tradition and spirit<br>
+                in the heart of Washington, D.C.
+            </p>
+        </div>
+        <div>
+            <span class="footer-heading">Navigate</span>
+            <ul class="footer-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#reservations">Reservations</a></li>
+            </ul>
+        </div>
+        <div>
+            <span class="footer-heading">Location</span>
+            <p>
+                1250 Connecticut Ave NW<br>
+                Washington, DC 20036<br><br>
+                +1 (202) 555-0182<br>
+                hello@hanji.com
+            </p>
+        </div>
+        <div>
+            <span class="footer-heading">Hours</span>
+            <p>
+                Monday – Friday<br>
+                5:30 PM – 11:00 PM<br><br>
+                Saturday – Sunday<br>
+                5:00 PM – 11:30 PM<br><br>
+                Bar open late nightly
+            </p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span class="footer-copy">© 2024 HANJI. All rights reserved.</span>
+        <div class="footer-social">
+            <a href="#">Instagram</a>
+            <a href="#">OpenTable</a>
+            <a href="#">Tock</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const progress    = document.getElementById('progress');
+    const navbar      = document.getElementById('navbar');
+    const heroBg      = document.getElementById('hero-bg');
+    const heroContent = document.getElementById('hero-content');
+    const heroH       = window.innerHeight;
+
+    // ── SCROLL: progress bar + nav + hero parallax ──
+    function onScroll() {
+        const y    = window.scrollY;
+        const docH = document.documentElement.scrollHeight - heroH;
+
+        // Progress bar
+        progress.style.width = Math.min((y / docH) * 100, 100) + '%';
+
+        // Nav
+        navbar.classList.toggle('scrolled', y > 60);
+
+        // Hero parallax — background drifts slower, content fades up
+        if (y < heroH * 1.2) {
+            heroBg.style.transform      = `translateY(${y * 0.3}px)`;
+            heroContent.style.transform = `translateY(${y * 0.1}px)`;
+            heroContent.style.opacity   = Math.max(0, 1 - y / (heroH * 0.7)).toString();
+        }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ── TAB INDICATOR ──
+    const tabsEl    = document.getElementById('menu-tabs');
+    const indicator = document.getElementById('tab-indicator');
+    const tabs      = document.querySelectorAll('.menu-tab');
+    const panels    = document.querySelectorAll('.menu-panel');
+
+    function moveIndicator(tab) {
+        const cr = tabsEl.getBoundingClientRect();
+        const tr = tab.getBoundingClientRect();
+        indicator.style.left  = (tr.left - cr.left + tabsEl.scrollLeft) + 'px';
+        indicator.style.width = tr.width + 'px';
+    }
+
+    // Position indicator once fonts are loaded
+    document.fonts.ready.then(() => moveIndicator(document.querySelector('.menu-tab.active')));
+    window.addEventListener('resize', () => moveIndicator(document.querySelector('.menu-tab.active')));
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t   => t.classList.remove('active'));
+            panels.forEach(p => p.classList.remove('active'));
+
+            tab.classList.add('active');
+            moveIndicator(tab);
+
+            const panel = document.getElementById(tab.dataset.tab);
+            panel.classList.add('active');
+
+            // Stagger-reveal items in the newly shown panel
+            panel.querySelectorAll('.fade-up').forEach((el, i) => {
+                el.classList.remove('visible');
+                el.style.transitionDelay = Math.min(i * 0.055, 0.35) + 's';
+                // Double rAF ensures class removal is painted first
+                requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+            });
+        });
+    });
+
+    // ── SCROLL-REVEAL with per-sibling stagger ──
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-up').forEach(el => {
+        // Stagger by position among fade-up siblings in the same parent
+        const siblings = Array.from(el.parentElement.children).filter(c => c.classList.contains('fade-up'));
+        const idx      = siblings.indexOf(el);
+        el.style.transitionDelay = Math.min(idx * 0.09, 0.42) + 's';
+        observer.observe(el);
+    });
+
+    // ── FORM ──
+    document.getElementById('res-date').min = new Date().toISOString().split('T')[0];
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const btn  = document.getElementById('submit-btn');
+        const name = (document.getElementById('res-name').value.trim().split(' ')[0]) || 'you';
+        btn.textContent      = `Confirmed — See you soon, ${name}!`;
+        btn.style.background = '#7a8c6e';
+        btn.disabled         = true;
+        setTimeout(() => {
+            btn.textContent      = 'Confirm Reservation';
+            btn.style.background = '';
+            btn.disabled         = false;
+            e.target.reset();
+        }, 5000);
+    }
+</script>
+</body>
+</html>
